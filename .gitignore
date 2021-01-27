@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# VsCode settings
+.vscode
+
+# Postgres migrations
+migrations

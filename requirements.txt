@@ -1,0 +1,17 @@
+Flask
+Flask-Bootstrap
+Flask-HTTPAuth
+Flask-Login
+Flask-Mail
+Flask-Migrate
+Flask-RQ2
+Flask-SQLAlchemy
+Flask-Bcrypt
+Flask-Script
+flask-restplus
+Flask-Testing
+Flask-WTF
+flask-cors
+SQLAlchemy
+Werkzeug==0.16.1
+PyJWT
