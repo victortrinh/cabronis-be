@@ -2,16 +2,14 @@ from flask import request
 from flask_restplus import Resource
 
 from ..dto.user_dto import UserDto
-from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password
-
 from ..service.auth_service import Auth
-from flask_httpauth import HTTPTokenAuth
+from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password
 
 api = UserDto.api
 user = UserDto.user
 user_change_password = UserDto.user_change_password
 
-auth = Auth.auth
+auth = Auth.auth_token
 
 
 @api.route('/')
