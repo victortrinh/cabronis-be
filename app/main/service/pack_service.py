@@ -1,14 +1,16 @@
-#import uuid
-#import datetime
+# import uuid
+# import datetime
 
-from flask import jsonify
 from app.main import db
 from app.main.model.pack import Pack
 
 
 def get_packs():
-    packs = Pack.query.all()
-    return jsonify(packs=[pack.serialize() for pack in packs])
+    return Pack.query.all()
+
+
+def get_pack(pack_id):
+    return Pack.query.filter_by(id=pack_id).first()
 
 
 def save_new_pack(data):
@@ -28,8 +30,8 @@ def update_packs(data):
     for pack in data:
         new_query = query.filter(Pack.id == pack['id'])
         record = new_query.one()
-        record.name = assembly["name"]
-        record.description = assembly["description"]
+        record.name = pack["name"]
+        record.description = pack["description"]
     db.session.flush()
     db.session.commit()
     response_object = {
