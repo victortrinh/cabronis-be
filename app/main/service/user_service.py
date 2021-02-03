@@ -1,4 +1,3 @@
-import uuid
 import datetime
 
 from app.main import db
@@ -17,8 +16,7 @@ def save_new_user(data):
         save_changes(new_user)
         response_object = {
             'status': 'success',
-            'message': 'Successfully registered.',
-            'Authorization': auth_token.decode()
+            'message': 'Successfully registered.'
         }
         return response_object, 201
     else:

@@ -1,19 +1,19 @@
 import logging
-from app.main.model.user import User
-from ..service.blacklist_service import save_token
-from ..model.user import User
-from flask_httpauth import HTTPTokenAuth
+
 from flask import current_app
+from flask_httpauth import HTTPTokenAuth
+
+from ..model.user import User
+from ..service.blacklist_service import save_token
 
 
 class Auth:
-
-    auth = HTTPTokenAuth(scheme='Bearer')
+    auth_token = HTTPTokenAuth(scheme='Bearer')
 
     @staticmethod
-    @auth.verify_token
+    @auth_token.verify_token
     def verify_token(token):
-        if current_app.config.get('DISABLE_AUTHENTICATION', False) == True:
+        if current_app.config.get('DISABLE_AUTHENTICATION', False):
             logging.warning(
                 'Authentication is disabled. Skipped token validation.')
             return True
@@ -72,6 +72,7 @@ class Auth:
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
+            return response_object, 401
 
     @staticmethod
     def get_logged_in_user(new_request):

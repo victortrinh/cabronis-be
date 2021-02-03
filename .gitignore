@@ -133,3 +133,6 @@ dmypy.json
 
 # Postgres migrations
 migrations
+
+# PyCharm stuff
+.idea

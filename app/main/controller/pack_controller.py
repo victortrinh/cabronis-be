@@ -1,19 +1,35 @@
-from flask_restplus import Resource
 from flask import request
-from ..service.pack_service import get_packs, save_new_pack, delete_pack, update_packs
+from flask_restplus import Resource
+
 from ..dto.pack_dto import PackDTO
 from ..service.auth_service import Auth
-from flask_httpauth import HTTPTokenAuth
+from ..service.pack_service import get_pack, get_packs, save_new_pack, delete_pack, update_packs
 
 api = PackDTO.api
-auth = Auth.auth
+pack = PackDTO.pack
+auth = Auth.auth_token
 
 
 @api.route('/all')
 class GetPacks(Resource):
     @api.doc('Get all packs')
+    @api.marshal_with(pack)
     def get(self):
         return get_packs()
+
+
+@api.route('/<pack_id>')
+@api.param('pack_id', 'The Pack identifier')
+@api.response(404, 'Pack not found.')
+class GetPack(Resource):
+    @api.doc('Get pack by identifier')
+    @api.marshal_with(pack)
+    def get(self, pack_id):
+        pack = get_pack(pack_id)
+        if not pack:
+            api.abort(404)
+        else:
+            return pack
 
 
 @api.route('/save')
