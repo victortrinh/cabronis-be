@@ -39,7 +39,7 @@
 
 1- To migrate your models changes to the migrations folder
 
-> python manage.py db migrate --message 'initial db migration'
+> python manage.py db migrate --message "initial db migration"
 
 2- To migrate your changes to the database
 
