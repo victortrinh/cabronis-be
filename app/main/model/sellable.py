@@ -1,4 +1,11 @@
+from enum import Enum
+
 from .. import db
+
+
+class SellableType(Enum):
+    pokemon = "pokemon"
+    basketball = "basketball"
 
 
 class Sellable(db.Model):
@@ -9,76 +16,34 @@ class Sellable(db.Model):
     stock = db.Column(db.Integer, unique=False)
     price = db.Column(db.Float, unique=False)
     description = db.Column(db.Text, unique=False)
+    category = db.Column(db.String(64), unique=False)
+    year = db.Column(db.Integer, unique=False)
+    team = db.Column(db.String(64), unique=False)
+    type = db.Column(db.Enum(SellableType), unique=False)
 
 
 class Card(Sellable):
-    __abstract__ = True
+    __tablename__ = "cards"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return '<Card {}>'.format(self.name)
 
 
 class Pack(Sellable):
-    __abstract__ = True
+    __tablename__ = "packs"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return '<Pack {}>'.format(self.name)
 
 
 class Box(Sellable):
-    __abstract__ = True
+    __tablename__ = "boxes"
 
-
-class PokemonCard(Card):
-    __tablename__ = "pokemon_cards"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    category = db.Column(db.String(64), unique=False)
+    id = db.Column(db.Integer, primary_key=True)
 
     def __repr__(self):
-        return '<Pokemon Card {}>'.format(self.name)
-
-
-class BasketballCard(Card):
-    __tablename__ = "basketball_cards"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    year = db.Column(db.Integer, unique=False)
-    team = db.Column(db.String(64), unique=False)
-
-    def __repr__(self):
-        return '<Basketball Card {}>'.format(self.name)
-
-
-class PokemonPack(Pack):
-    __tablename__ = "pokemon_packs"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    category = db.Column(db.String(64), unique=False)
-
-    def __repr__(self):
-        return '<Pokemon Pack {}>'.format(self.name)
-
-
-class BasketballPack(Pack):
-    __tablename__ = "basketball_packs"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    year = db.Column(db.Integer, unique=False)
-
-    def __repr__(self):
-        return '<Basketball Pack {}>'.format(self.name)
-
-
-class PokemonBox(Box):
-    __tablename__ = "pokemon_boxes"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    category = db.Column(db.String(64), unique=False)
-
-    def __repr__(self):
-        return '<Pokemon Box {}>'.format(self.name)
-
-
-class BasketballBox(Box):
-    __tablename__ = "basketball_boxes"
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    year = db.Column(db.Integer, unique=False)
-
-    def __repr__(self):
-        return '<Basketball Box {}>'.format(self.name)
+        return '<Box {}>'.format(self.name)
