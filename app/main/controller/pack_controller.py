@@ -1,9 +1,9 @@
 from flask import request
 from flask_restplus import Resource
 
-from ..dto.pack_dto import PackDTO
-from ..service.auth_service import Auth
-from ..service.pack_service import get_pack, get_packs, save_new_pack, delete_pack, update_packs
+from app.main.dto.sellable_dto import PackDTO
+from app.main.service.auth_service import Auth
+from app.main.service.pack_service import get_pack, get_packs, save_new_pack, delete_pack, update_packs
 
 api = PackDTO.api
 pack = PackDTO.pack

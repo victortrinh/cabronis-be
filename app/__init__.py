@@ -1,5 +1,3 @@
-# app/__init__.py
-
 from flask import Blueprint
 from flask_cors import CORS
 from flask_restplus import Api
@@ -35,6 +33,5 @@ def after_request(response):
 api.add_namespace(user_ns, path=BASE_URL + '/user')
 api.add_namespace(auth_ns, path=BASE_URL + '/auth')
 api.add_namespace(pack_ns, path=BASE_URL + '/pack')
-
 
 CORS(api.blueprint)
