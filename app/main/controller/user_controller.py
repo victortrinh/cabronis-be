@@ -3,7 +3,8 @@ from flask_restplus import Resource
 
 from ..dto.user_dto import UserDto
 from ..service.auth_service import Auth
-from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password
+from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password, add_to_wishlist, \
+    remove_from_wishlist, get_wishlist
 
 api = UserDto.api
 user = UserDto.user
@@ -16,10 +17,9 @@ auth = Auth.auth_token
 class UserList(Resource):
     @auth.login_required
     @api.doc(security='Bearer')
-    @api.doc('list_of_registered_users')
+    @api.doc('list of registered users')
     @api.marshal_list_with(user, envelope='data')
     def get(self):
-        """List all registered users"""
         return get_all_users()
 
 
@@ -38,27 +38,55 @@ class Register(Resource):
 class ChangePassword(Resource):
     @auth.login_required
     @api.doc(security='Bearer')
+    @api.doc('change user password')
     @api.response(201, 'User successfully changed password.')
-    @api.doc('Change user password')
+    @api.response(404, 'User not found.')
+    @api.response(409, 'Incorrect password.')
     @api.expect(user_change_password, validate=True)
     def post(self):
-        """Changes user password"""
         data = request.json
         return change_user_password(data=data)
 
 
-@api.route('/<id>')
-@api.param('public_id', 'The User identifier')
-@api.response(404, 'User not found.')
+@api.route('/<user_id>')
+@api.param('user_id', 'The User identifier')
 class User(Resource):
     @auth.login_required
     @api.doc(security='Bearer')
     @api.doc('get a user')
+    @api.response(404, 'User not found.')
     @api.marshal_with(user)
-    def get(self, public_id):
-        """Get a user given its identifier"""
-        user = get_a_user(public_id)
-        if not user:
-            api.abort(404)
-        else:
-            return user
+    def get(self, user_id):
+        return get_a_user(user_id)
+
+
+@api.route('/<user_id>/wishlist')
+@api.param('user_id', 'The user identifier')
+@api.doc('get a user\'s wishlist')
+class WishlistGet(Resource):
+    @auth.login_required
+    @api.doc('retrieve sellable IDs from a user\'s wishlist')
+    def get(self, user_id):
+        return get_wishlist(user_id)
+
+
+@api.route('/<user_id>/wishlist/save/<sellable_id>')
+@api.param('user_id', 'The user identifier')
+@api.param('sellable_id', 'The sellable identifier')
+class WishlistAdd(Resource):
+    @auth.login_required
+    @api.doc(security='Bearer')
+    @api.doc('add a sellable to a user\'s wishlist')
+    def post(self, user_id, sellable_id):
+        return add_to_wishlist(user_id, sellable_id)
+
+
+@api.route('/<user_id>/wishlist/delete/<sellable_id>')
+@api.param('user_id', 'The user identifier')
+@api.param('sellable_id', 'The sellable identifier')
+class WishlistRemove(Resource):
+    @auth.login_required
+    @api.doc(security='Bearer')
+    @api.doc('remove a sellable from a user\'s wishlist')
+    def delete(self, user_id, sellable_id):
+        return remove_from_wishlist(user_id, sellable_id)

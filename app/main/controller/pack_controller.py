@@ -3,7 +3,7 @@ from flask_restplus import Resource
 
 from app.main.dto.sellable_dto import PackDTO
 from app.main.service.auth_service import Auth
-from app.main.service.pack_service import get_pack, get_packs, save_new_pack, delete_pack, update_packs
+from app.main.service.pack_service import get_pack, get_packs, save_new_pack, update_pack, delete_pack
 
 api = PackDTO.api
 pack = PackDTO.pack
@@ -25,11 +25,7 @@ class GetPack(Resource):
     @api.doc('Get pack by identifier')
     @api.marshal_with(pack)
     def get(self, pack_id):
-        pack = get_pack(pack_id)
-        if not pack:
-            api.abort(404)
-        else:
-            return pack
+        return get_pack(pack_id)
 
 
 @api.route('/save')
@@ -43,23 +39,23 @@ class SavePack(Resource):
         return save_new_pack(data)
 
 
-@api.route('/update')
+@api.route('/update/<pack_id>')
+@api.param('pack_id', 'The Pack identifier')
 class UpdatePacks(Resource):
     @auth.login_required
     @api.doc(security='Bearer')
     @api.doc('Update a pack')
-    @api.expect([PackDTO.full_pack], validate=True)
-    def put(self):
+    @api.expect(PackDTO.pack, validate=True)
+    def put(self, pack_id):
         data = request.json
-        return update_packs(data)
+        return update_pack(pack_id, data)
 
 
-@api.route('/delete')
+@api.route('/delete/<pack_id>')
+@api.param('pack_id', 'The Pack identifier')
 class DeletePack(Resource):
     @auth.login_required
     @api.doc(security='Bearer')
     @api.doc('Delete a pack')
-    @api.expect(PackDTO.pack_id, validate=True)
-    def delete(self):
-        data = request.json
-        return delete_pack(data)
+    def delete(self, pack_id):
+        return delete_pack(pack_id)

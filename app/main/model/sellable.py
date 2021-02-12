@@ -3,47 +3,66 @@ from enum import Enum
 from .. import db
 
 
-class SellableType(Enum):
-    pokemon = "pokemon"
-    basketball = "basketball"
+class SellableTheme(Enum):
+    pokemon = 'pokemon'
+    basketball = 'basketball'
 
 
 class Sellable(db.Model):
-    __abstract__ = True
+    __tablename__ = 'sellables'
 
-    name = db.Column(db.String(64), unique=False)
-    image_str = db.Column(db.String(256), unique=False)
-    stock = db.Column(db.Integer, unique=False)
-    price = db.Column(db.Float, unique=False)
-    description = db.Column(db.Text, unique=False)
-    category = db.Column(db.String(64), unique=False)
-    year = db.Column(db.Integer, unique=False)
-    team = db.Column(db.String(64), unique=False)
-    type = db.Column(db.Enum(SellableType), unique=False)
+    sellable_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    image_str = db.Column(db.String(256))
+    stock = db.Column(db.Integer)
+    price = db.Column(db.Float)
+    description = db.Column(db.Text)
+    category = db.Column(db.String(64))
+    team = db.Column(db.String(64))
+    theme = db.Column(db.Enum(SellableTheme))
+    type = db.Column(db.String(64))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'sellable',
+        'polymorphic_on': type
+    }
 
 
 class Card(Sellable):
-    __tablename__ = "cards"
+    __tablename__ = 'cards'
 
-    id = db.Column(db.Integer, primary_key=True)
+    card_id = db.Column(db.Integer, db.ForeignKey('sellables.sellable_id'), primary_key=True)
+    year = db.Column(db.Integer)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'card'
+    }
 
     def __repr__(self):
         return '<Card {}>'.format(self.name)
 
 
 class Pack(Sellable):
-    __tablename__ = "packs"
+    __tablename__ = 'packs'
 
-    id = db.Column(db.Integer, primary_key=True)
+    pack_id = db.Column(db.Integer, db.ForeignKey('sellables.sellable_id'), primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'pack'
+    }
 
     def __repr__(self):
         return '<Pack {}>'.format(self.name)
 
 
 class Box(Sellable):
-    __tablename__ = "boxes"
+    __tablename__ = 'boxes'
 
-    id = db.Column(db.Integer, primary_key=True)
+    box_id = db.Column(db.Integer, db.ForeignKey('sellables.sellable_id'), primary_key=True)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'box'
+    }
 
     def __repr__(self):
         return '<Box {}>'.format(self.name)
