@@ -41,7 +41,7 @@ class SavePack(Resource):
 
 @api.route('/update/<pack_id>')
 @api.param('pack_id', 'The Pack identifier')
-class UpdatePacks(Resource):
+class UpdatePack(Resource):
     @auth.login_required
     @api.doc(security='Bearer')
     @api.doc('Update a pack')
