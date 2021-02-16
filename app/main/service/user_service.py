@@ -17,7 +17,8 @@ def save_new_user(data):
         return response_object, 409
 
     new_user = User(
-        username=data['username'],
+        first_name=data['first_name'],
+        last_name=data['last_name'],
         email=data['email'],
         password=data['password'],
         registered_on=datetime.datetime.utcnow()
