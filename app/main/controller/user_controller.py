@@ -3,8 +3,7 @@ from flask_restplus import Resource
 
 from ..dto.user_dto import UserDto
 from ..service.auth_service import Auth
-from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password, add_to_wishlist, \
-    remove_from_wishlist, get_wishlist
+from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password
 
 api = UserDto.api
 user = UserDto.user
@@ -58,35 +57,3 @@ class User(Resource):
     @api.marshal_with(user)
     def get(self, user_id):
         return get_a_user(user_id)
-
-
-@api.route('/<user_id>/wishlist')
-@api.param('user_id', 'The user identifier')
-@api.doc('get a user\'s wishlist')
-class WishlistGet(Resource):
-    @auth.login_required
-    @api.doc('retrieve sellable IDs from a user\'s wishlist')
-    def get(self, user_id):
-        return get_wishlist(user_id)
-
-
-@api.route('/<user_id>/wishlist/save/<sellable_id>')
-@api.param('user_id', 'The user identifier')
-@api.param('sellable_id', 'The sellable identifier')
-class WishlistAdd(Resource):
-    @auth.login_required
-    @api.doc(security='Bearer')
-    @api.doc('add a sellable to a user\'s wishlist')
-    def post(self, user_id, sellable_id):
-        return add_to_wishlist(user_id, sellable_id)
-
-
-@api.route('/<user_id>/wishlist/delete/<sellable_id>')
-@api.param('user_id', 'The user identifier')
-@api.param('sellable_id', 'The sellable identifier')
-class WishlistRemove(Resource):
-    @auth.login_required
-    @api.doc(security='Bearer')
-    @api.doc('remove a sellable from a user\'s wishlist')
-    def delete(self, user_id, sellable_id):
-        return remove_from_wishlist(user_id, sellable_id)

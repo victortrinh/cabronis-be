@@ -6,13 +6,6 @@ from app.main.model.blacklist import BlacklistToken
 from .. import db, flask_bcrypt
 from ..config import key
 
-wishlist_table = db.Table('wishlist', db.metadata,
-                          db.Column('user', db.Integer,
-                                    db.ForeignKey('users.user_id')),
-                          db.Column('sellable', db.Integer,
-                                    db.ForeignKey('sellables.sellable_id'))
-                          )
-
 
 class User(db.Model):
     __tablename__ = "users"
@@ -23,7 +16,7 @@ class User(db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     registered_on = db.Column(db.DateTime, nullable=False)
     password_hash = db.Column(db.String(128))
-    wishlist = db.relationship("Sellable", secondary=wishlist_table)
+    sellables = db.relationship("Wishlist")
 
     def __repr__(self):
         return '<User {}>'.format(self.email)

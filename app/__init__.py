@@ -5,6 +5,7 @@ from flask_restplus import Api
 from .main.controller.auth_controller import api as auth_ns
 from .main.controller.pack_controller import api as pack_ns
 from .main.controller.user_controller import api as user_ns
+from .main.controller.wishlist_controller import api as wishlist_ns
 
 BASE_URL = '/api'
 
@@ -33,5 +34,6 @@ def after_request(response):
 api.add_namespace(user_ns, path=BASE_URL + '/user')
 api.add_namespace(auth_ns, path=BASE_URL + '/auth')
 api.add_namespace(pack_ns, path=BASE_URL + '/pack')
+api.add_namespace(wishlist_ns, path=BASE_URL + '/wishlist')
 
 CORS(api.blueprint)
