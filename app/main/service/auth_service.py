@@ -26,19 +26,26 @@ class Auth:
         try:
             # fetch the user data
             user = User.query.filter_by(email=data.get('email')).first()
-            if user and user.check_password(data.get('password')):
-                auth_token = User.encode_auth_token(user.user_id)
-                if auth_token:
+            if user:
+                if user.check_password(data.get('password')):
+                    auth_token = User.encode_auth_token(user.user_id)
+                    if auth_token:
+                        response_object = {
+                            'status': 'success',
+                            'message': 'Successfully logged in.',
+                            'Authorization': auth_token
+                        }
+                        return response_object, 200
+                else:
                     response_object = {
-                        'status': 'success',
-                        'message': 'Successfully logged in.',
-                        'Authorization': auth_token.decode()
+                        'status': 'fail',
+                        'message': 'The email address and password does not match our records.'
                     }
-                    return response_object, 200
+                    return response_object, 401
             else:
                 response_object = {
                     'status': 'fail',
-                    'message': 'email or password does not match.'
+                    'message': 'The email address entered does not match any account. Please double check and try again. If not, create an account!'
                 }
                 return response_object, 401
 

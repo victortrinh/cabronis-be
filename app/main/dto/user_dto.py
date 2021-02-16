@@ -6,10 +6,11 @@ class UserDto:
 
     user = api.model('user', {
         'email': fields.String(required=True, description='user email address'),
-        'username': fields.String(required=True, description='user username'),
+        'first_name': fields.String(required=True, description='user first name'),
+        'last_name': fields.String(required=True, description='user last name'),
         'password': fields.String(required=True, description='user password')
     })
-    
+
     user_change_password = api.model('user_change_password', {
         'email': fields.String(required=True, description='user email address'),
         'current_password': fields.String(required=True, description='Current user password'),
