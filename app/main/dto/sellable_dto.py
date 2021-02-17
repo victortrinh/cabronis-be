@@ -15,7 +15,7 @@ class WishlistDTO:
         'category': fields.String(description='The category of the wishlist item'),
         'team': fields.String(description='The team of the wishlist item'),
         'theme': fields.String(description='The theme of the wishlist item',
-                               enum=SellableTheme.member_names_),
+                               enum=SellableTheme._member_names_),
         'type': fields.String(description='The type of the wishlist item'),
         'year': fields.String(description='The year associated with the wishlist item')
     })

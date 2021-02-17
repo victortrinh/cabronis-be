@@ -57,11 +57,7 @@ class User(db.Model):
     def is_valid_token(auth_token):
         try:
             payload = jwt.decode(auth_token, key)
-            is_blacklisted_token = BlacklistToken.check_blacklist(auth_token)
-            if is_blacklisted_token:
-                return False
-            else:
-                return True
+            return payload["sub"]
         except jwt.ExpiredSignatureError:
             return False
         except jwt.InvalidTokenError:

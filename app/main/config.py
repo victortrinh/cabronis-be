@@ -1,11 +1,14 @@
 import os
+import psycopg2
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+stream = os.popen('heroku config:get DATABASE_URL -a pscbreaks')
+output = stream.read()
+
 
 class Config:
-    SECRET_KEY = os.environ.get(
-        'SECRET_KEY') or 'ghghuvtusdalshurhtycakydiriybae'
+    SECRET_KEY = os.getenv('SECRET_KEY', 'ghghuvtusdalshurhtycakydiriybae')
     DEBUG = False
 
 
@@ -29,7 +32,11 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgres://postgres:postgres@localhost:5432/cabronis'
+    DISABLE_AUTHENTICATION = False
+    IMAGE_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+    IMAGE_MAX_FILE_SIZE = 2  # In Megabytes
+    IMAGE_UPLOAD_DIRECTORY = 'app\\static\\images'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or output
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

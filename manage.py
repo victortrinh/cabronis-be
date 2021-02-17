@@ -9,7 +9,7 @@ from app.main import create_app, db
 import werkzeug
 werkzeug.cached_property = werkzeug.utils.cached_property
 
-app = create_app('dev')
+app = create_app('prod')
 
 app.register_blueprint(blueprint)
 

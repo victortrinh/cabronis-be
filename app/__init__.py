@@ -14,7 +14,7 @@ blueprint = Blueprint('api', __name__)
 
 api = Api(blueprint,
           title='Cabronis',
-          version='0.1',
+          version='1.0.0',
           description='All servicing for Cabronis',
           authorizations={
               'Bearer': {
