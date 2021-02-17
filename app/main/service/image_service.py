@@ -4,14 +4,14 @@ import cloudinary
 from flask import current_app
 from werkzeug.utils import secure_filename
 
-cloudinary.config(
-    cloud_name=current_app.config['CLOUDIFY_CLOUD_NAME'],
-    api_key=current_app.config['CLOUDIFY_API_KEY'],
-    api_secret=current_app.config['CLOUDIFY_API_SECRET']
-)
-
 
 def save_new_image(files):
+    
+    cloudinary.config(
+        cloud_name=current_app.config['CLOUDIFY_CLOUD_NAME'],
+        api_key=current_app.config['CLOUDIFY_API_KEY'],
+        api_secret=current_app.config['CLOUDIFY_API_SECRET']
+    )
 
     if 'file' not in files:
         response_object = {
