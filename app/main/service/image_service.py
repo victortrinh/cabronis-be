@@ -1,10 +1,18 @@
 import os
+import cloudinary
 
 from flask import current_app
 from werkzeug.utils import secure_filename
 
+cloudinary.config(
+    cloud_name=current_app.config['CLOUDIFY_CLOUD_NAME'],
+    api_key=current_app.config['CLOUDIFY_API_KEY'],
+    api_secret=current_app.config['CLOUDIFY_API_SECRET']
+)
+
 
 def save_new_image(files):
+
     if 'file' not in files:
         response_object = {
             'status': 'fail',
@@ -46,13 +54,15 @@ def save_new_image(files):
         }
         return response_object, 422
 
-    file_name = secure_filename(file_name)
-    file_path = os.path.join(current_app.config['IMAGE_UPLOAD_DIRECTORY'], file_name)
+    # file_name = secure_filename(file_name)
+    # file_path = os.path.join(current_app.config['IMAGE_UPLOAD_DIRECTORY'], file_name)
+    #
+    # file.save(file_path)
 
-    file.save(file_path)
+    response = cloudinary.uploader.upload(file)
 
-    response_object = {
-        'image_path': file_path,
-    }
+    # response_object = {
+    #     'image_path': file_path,
+    # }
 
-    return response_object, 201
+    return response, 201

@@ -31,6 +31,9 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
+    CLOUDIFY_API_KEY = '979931912393327'
+    CLOUDIFY_API_SECRET = 'd9C8wztcyXVFk2w36Qx1_yiyZhU'
+    CLOUDIFY_CLOUD_NAME = 'hyu5kjzfl'
     DEBUG = False
     DISABLE_AUTHENTICATION = False
     IMAGE_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
