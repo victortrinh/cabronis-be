@@ -6,6 +6,9 @@ from .. import db
 class SellableTheme(Enum):
     pokemon = 'pokemon'
     basketball = 'basketball'
+    football = 'football'
+    baseball = 'baseball'
+    hockey = 'hockey'
 
 
 class Sellable(db.Model):
@@ -13,7 +16,7 @@ class Sellable(db.Model):
 
     sellable_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    image_str = db.Column(db.String(256))
+    image_path = db.Column(db.String(256))
     stock = db.Column(db.Integer)
     price = db.Column(db.Float)
     description = db.Column(db.Text)

@@ -61,7 +61,7 @@ def change_user_password(data):
 
         return response_object, 409
 
-    user.password = data["password"]
+    user.password = data['password']
     db.session.flush()
     db.session.commit()
 

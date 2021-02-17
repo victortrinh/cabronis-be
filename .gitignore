@@ -136,3 +136,6 @@ migrations
 
 # PyCharm stuff
 .idea
+
+# static folder
+app/static

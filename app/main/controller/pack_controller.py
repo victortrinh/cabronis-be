@@ -37,7 +37,7 @@ class SavePack(Resource):
     def post(self):
         data = request.json
         return save_new_pack(data)
-
+    
 
 @api.route('/update/<pack_id>')
 @api.param('pack_id', 'The Pack identifier')

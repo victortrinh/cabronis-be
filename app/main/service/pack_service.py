@@ -23,7 +23,7 @@ def save_new_pack(pack):
     new_pack = Pack(
         name=pack['name'],
         description=pack['description'],
-        image_str=pack['image_str'],
+        image_path=pack['image_path'],
         stock=pack['stock'],
         price=pack['price'],
         category=pack['category'],
@@ -52,7 +52,7 @@ def update_pack(pack_id, pack):
 
     existing_pack.name = pack['name'],
     existing_pack.description = pack['description'],
-    existing_pack.image_str = pack['image_str'],
+    existing_pack.image_path = pack['image_path'],
     existing_pack.stock = pack['stock'],
     existing_pack.price = pack['price'],
     existing_pack.category = pack['category'],
@@ -64,7 +64,7 @@ def update_pack(pack_id, pack):
 
     response_object = {
         'status': 'success',
-        'message': 'Successfully updated rows.',
+        'message': 'Successfully updated pack.',
     }
     return response_object, 201
 
@@ -84,6 +84,6 @@ def delete_pack(pack_id):
 
     response_object = {
         'status': 'success',
-        'message': "Pack was deleted successfully."
+        'message': 'Pack was deleted successfully.'
     }
     return response_object, 200

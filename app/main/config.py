@@ -11,17 +11,20 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    DISABLE_AUTHENTICATION = True
+    IMAGE_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+    IMAGE_MAX_FILE_SIZE = 2  # In Megabytes
+    IMAGE_UPLOAD_DIRECTORY = 'app\\static\\images'
     SQLALCHEMY_DATABASE_URI = 'postgres://postgres:postgres@localhost:5432/cabronis'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    DISABLE_AUTHENTICATION = True
 
 
 class TestingConfig(Config):
     DEBUG = True
-    TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgres://postgres:postgres@localhost:5432/cabronis'
     PRESERVE_CONTEXT_ON_EXCEPTION = False
+    SQLALCHEMY_DATABASE_URI = 'postgres://postgres:postgres@localhost:5432/cabronis'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    TESTING = True
 
 
 class ProductionConfig(Config):
