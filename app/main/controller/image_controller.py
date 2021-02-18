@@ -9,13 +9,15 @@ api = Namespace('Image', description='Image operations')
 auth = Auth.auth_token
 
 upload_parser = api.parser()
-upload_parser.add_argument('file', location='files', type=FileStorage, required=True)
+upload_parser.add_argument('file', location='files',
+                           type=FileStorage, required=True)
 
 
 @api.route('/save')
 @api.expect(upload_parser)
 class SaveImage(Resource):
-    @auth.login_required
+    @auth.login_required(role=['admin', 'seller'])
+    @api.doc(security='Bearer')
     @api.doc(security='Bearer')
     @api.doc('Save new image')
     def post(self):
