@@ -1,5 +1,7 @@
 from flask_restplus import Namespace, fields
 
+from ..model.user import UserRole
+
 
 class UserDto:
     api = Namespace('User', description='user related operations')
@@ -9,6 +11,14 @@ class UserDto:
         'first_name': fields.String(required=True, description='user first name'),
         'last_name': fields.String(required=True, description='user last name'),
         'password': fields.String(required=True, description='user password')
+    })
+
+    user_with_roles = api.model('user', {
+        'email': fields.String(required=True, description='user email address'),
+        'first_name': fields.String(required=True, description='user first name'),
+        'last_name': fields.String(required=True, description='user last name'),
+        'password': fields.String(required=True, description='user password'),
+        'roles': fields.List(fields.String(required=False, description='user password', enum=UserRole._member_names_)),
     })
 
     user_change_password = api.model('user_change_password', {

@@ -1,7 +1,7 @@
 import datetime
 
 from app.main import db
-from app.main.model.user import User
+from app.main.model.user import User, UserRole
 
 
 def save_new_user(data):
@@ -20,6 +20,7 @@ def save_new_user(data):
         last_name=data['last_name'],
         email=data['email'],
         password=data['password'],
+        roles=['buyer'],
         registered_on=datetime.datetime.utcnow()
     )
 

@@ -33,6 +33,7 @@ class Auth:
                         response_object = {
                             'status': 'success',
                             'message': 'Successfully logged in.',
+                            'roles': user.roles,
                             'Authorization': auth_token.decode()
                         }
                         return response_object, 200
@@ -94,7 +95,7 @@ class Auth:
                     'data': {
                         'user_id': user.blacklist_id,
                         'email': user.email,
-                        'admin': user.admin,
+                        'roles': user.roles,
                         'registered_on': str(user.registered_on)
                     }
                 }
@@ -110,3 +111,15 @@ class Auth:
                 'message': 'Provide a valid auth token.'
             }
             return response_object, 401
+
+    @auth_token.get_user_roles
+    def get_user_roles(data):
+        auth_token = data["token"]
+        resp = User.decode_auth_token(auth_token)
+
+        if not isinstance(resp, str):
+            user = User.query.filter_by(user_id=resp).first()
+            print("USER : ", user)
+            return user.roles
+        else:
+            return []

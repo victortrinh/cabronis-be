@@ -1,8 +1,8 @@
 """initial db migration
 
-Revision ID: 9298be73c0f6
+Revision ID: 34b2d1af20cf
 Revises: 
-Create Date: 2021-02-17 16:01:22.432865
+Create Date: 2021-02-17 23:49:57.710555
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9298be73c0f6'
+revision = '34b2d1af20cf'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -44,12 +44,11 @@ def upgrade():
     sa.Column('last_name', sa.String(length=120), nullable=True),
     sa.Column('email', sa.String(length=120), nullable=True),
     sa.Column('registered_on', sa.DateTime(), nullable=False),
+    sa.Column('roles', sa.ARRAY(sa.String(length=120)), nullable=True),
     sa.Column('password_hash', sa.String(length=128), nullable=True),
     sa.PrimaryKeyConstraint('user_id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
-    op.create_index(op.f('ix_users_first_name'), 'users', ['first_name'], unique=False)
-    op.create_index(op.f('ix_users_last_name'), 'users', ['last_name'], unique=False)
     op.create_table('boxes',
     sa.Column('box_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['box_id'], ['sellables.sellable_id'], ),
@@ -83,8 +82,6 @@ def downgrade():
     op.drop_table('packs')
     op.drop_table('cards')
     op.drop_table('boxes')
-    op.drop_index(op.f('ix_users_last_name'), table_name='users')
-    op.drop_index(op.f('ix_users_first_name'), table_name='users')
     op.drop_index(op.f('ix_users_email'), table_name='users')
     op.drop_table('users')
     op.drop_table('sellables')
