@@ -1,5 +1,4 @@
 import os
-import psycopg2
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -13,6 +12,10 @@ class Config:
 
 
 class DevelopmentConfig(Config):
+    BUCKETEER_ACCESS_KEY_ID = 'AKIAVZH4SBSY3BJ4ECKV'
+    BUCKETEER_BUCKET_NAME = 'bucketeer-87788d9b-831a-4c5b-a8c8-161fd2c57dfa'
+    BUCKETEER_PREFIX_NAME = ' public/images/'
+    BUCKETEER_SECRET_ACCESS_KEY = '0DcRc2eoUU0i83sN3QPrMvFHtTInmEaNw35L5CpW'
     DEBUG = True
     DISABLE_AUTHENTICATION = True
     IMAGE_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -31,9 +34,10 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    CLOUDIFY_API_KEY = '979931912393327'
-    CLOUDIFY_API_SECRET = 'd9C8wztcyXVFk2w36Qx1_yiyZhU'
-    CLOUDIFY_CLOUD_NAME = 'hyu5kjzfl'
+    BUCKETEER_ACCESS_KEY_ID = 'AKIAVZH4SBSY3BJ4ECKV'
+    BUCKETEER_BUCKET_NAME = 'bucketeer-87788d9b-831a-4c5b-a8c8-161fd2c57dfa'
+    BUCKETEER_PREFIX_NAME = ' public/images/'
+    BUCKETEER_SECRET_ACCESS_KEY = '0DcRc2eoUU0i83sN3QPrMvFHtTInmEaNw35L5CpW'
     DEBUG = False
     DISABLE_AUTHENTICATION = False
     IMAGE_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}

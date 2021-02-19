@@ -1,17 +1,11 @@
 import os
 
-import cloudinary
-import cloudinary.uploader
+import boto3
+from botocore.exceptions import ClientError
 from flask import current_app
 
 
 def save_new_image(files):
-    cloudinary.config(
-        cloud_name=current_app.config['CLOUDIFY_CLOUD_NAME'],
-        api_key=current_app.config['CLOUDIFY_API_KEY'],
-        api_secret=current_app.config['CLOUDIFY_API_SECRET']
-    )
-
     if 'file' not in files:
         response_object = {
             'status': 'fail',
@@ -53,15 +47,24 @@ def save_new_image(files):
         }
         return response_object, 422
 
-    # file_name = secure_filename(file_name)
-    # file_path = os.path.join(current_app.config['IMAGE_UPLOAD_DIRECTORY'], file_name)
-    #
-    # file.save(file_path)
+    s3_client = boto3.client('s3',
+                             aws_access_key_id=current_app.config['BUCKETEER_ACCESS_KEY_ID'],
+                             aws_secret_access_key=current_app.config['BUCKETEER_SECRET_ACCESS_KEY'])
 
-    response = cloudinary.uploader.upload(file)
+    file_path = current_app.config['BUCKETEER_PREFIX_NAME'] + file_name
 
-    # response_object = {
-    #     'image_path': file_path,
-    # }
+    try:
+        s3_client.upload_fileobj(file, current_app.config['BUCKETEER_BUCKET_NAME'], file_path)
+    except ClientError as e:
+        response_object = {
+            'status': 'fail',
+            'message': 'Unable to upload file.'
+        }
+        return response_object, 422
 
-    return response, 201
+    response_object = {
+        'status': 'success',
+        'message': 'File uploaded successfully under ' + file_path + '.'
+    }
+
+    return response_object, 201
