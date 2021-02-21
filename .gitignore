@@ -133,6 +133,3 @@ dmypy.json
 
 # PyCharm stuff
 .idea
-
-# static folder
-app/static

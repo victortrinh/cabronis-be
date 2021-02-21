@@ -9,9 +9,9 @@ from ..config import key
 
 
 class UserRole(Enum):
-    admin = 'admin'
+    buyer = 'buyer' 
     seller = 'seller'
-    buyer = 'buyer'
+    admin = 'admin'
 
 
 class User(db.Model):

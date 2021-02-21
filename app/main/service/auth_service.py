@@ -112,14 +112,19 @@ class Auth:
             }
             return response_object, 401
 
+    @staticmethod
     @auth_token.get_user_roles
     def get_user_roles(data):
+        if current_app.config.get('DISABLE_AUTHENTICATION', False):
+            logging.warning(
+                'Authentication is disabled. Skipped token validation.')
+            return ['buyer', 'seller', 'admin']
+
         auth_token = data["token"]
         resp = User.decode_auth_token(auth_token)
 
         if not isinstance(resp, str):
             user = User.query.filter_by(user_id=resp).first()
-            print("USER : ", user)
             return user.roles
         else:
             return []

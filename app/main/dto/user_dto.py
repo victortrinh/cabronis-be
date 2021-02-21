@@ -13,12 +13,16 @@ class UserDto:
         'password': fields.String(required=True, description='user password')
     })
 
+    user_roles = api.model('user', {
+        'roles': fields.List(fields.String(required=False, description='user roles', enum=UserRole._member_names_)),
+    })
+
     user_with_roles = api.model('user', {
         'email': fields.String(required=True, description='user email address'),
         'first_name': fields.String(required=True, description='user first name'),
         'last_name': fields.String(required=True, description='user last name'),
         'password': fields.String(required=True, description='user password'),
-        'roles': fields.List(fields.String(required=False, description='user password', enum=UserRole._member_names_)),
+        'roles': fields.List(fields.String(required=False, description='user roles', enum=UserRole._member_names_)),
     })
 
     user_change_password = api.model('user_change_password', {

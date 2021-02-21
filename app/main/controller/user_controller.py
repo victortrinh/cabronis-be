@@ -3,10 +3,11 @@ from flask_restplus import Resource
 
 from ..dto.user_dto import UserDto
 from ..service.auth_service import Auth
-from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password
+from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password, get_roles
 
 api = UserDto.api
 user = UserDto.user
+user_roles = UserDto.user_roles
 user_with_roles = UserDto.user_with_roles
 user_change_password = UserDto.user_change_password
 
@@ -58,3 +59,14 @@ class User(Resource):
     @api.marshal_with(user)
     def get(self, user_id):
         return get_a_user(user_id)
+
+
+@api.route('/getRoles')
+class GetRoles(Resource):
+    @auth.login_required
+    @api.doc(security='Bearer')
+    @api.doc('Get role')
+    @api.marshal_with(user_roles)
+    def post(self):
+        auth_header = request.headers.get('Authorization')
+        return get_roles(data=auth_header)
