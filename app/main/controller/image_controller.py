@@ -18,7 +18,6 @@ upload_parser.add_argument('file', location='files',
 class SaveImage(Resource):
     @auth.login_required(role=['admin', 'seller'])
     @api.doc(security='Bearer')
-    @api.doc(security='Bearer')
     @api.doc('Save new image')
     def post(self):
         files = request.files

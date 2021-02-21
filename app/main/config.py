@@ -1,5 +1,4 @@
 import os
-import psycopg2
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -13,11 +12,15 @@ class Config:
 
 
 class DevelopmentConfig(Config):
+    S3_ACCESS_KEY_ID = 'AKIAJCDZTGIOZBPQE5EQ'
+    S3_BUCKET_NAME = 'pscbreaks-bucket'
+    S3_PREFIX_NAME = 'public/images/'
+    S3_SECRET_ACCESS_KEY = '4cj8I9n1heJeu2LDHUEkyBlSttHcIHil+YCCideL'
+    S3_URL = 'https://pscbreaks-bucket.s3.amazonaws.com'
     DEBUG = True
     DISABLE_AUTHENTICATION = True
     IMAGE_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
     IMAGE_MAX_FILE_SIZE = 2  # In Megabytes
-    IMAGE_UPLOAD_DIRECTORY = 'app\\static\\images'
     SQLALCHEMY_DATABASE_URI = 'postgres://postgres:postgres@localhost:5432/cabronis'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -31,11 +34,15 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
+    S3_ACCESS_KEY_ID = 'AKIAJCDZTGIOZBPQE5EQ'
+    S3_BUCKET_NAME = 'pscbreaks-bucket'
+    S3_PREFIX_NAME = 'public/images/'
+    S3_SECRET_ACCESS_KEY = '4cj8I9n1heJeu2LDHUEkyBlSttHcIHil+YCCideL'
+    S3_URL = 'https://pscbreaks-bucket.s3.amazonaws.com'
     DEBUG = False
     DISABLE_AUTHENTICATION = False
     IMAGE_ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
     IMAGE_MAX_FILE_SIZE = 2  # In Megabytes
-    IMAGE_UPLOAD_DIRECTORY = 'app\\static\\images'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or output
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

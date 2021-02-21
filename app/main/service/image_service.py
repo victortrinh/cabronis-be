@@ -1,7 +1,8 @@
 import os
 
+import boto3
+from botocore.exceptions import ClientError
 from flask import current_app
-from werkzeug.utils import secure_filename
 
 
 def save_new_image(files):
@@ -46,13 +47,25 @@ def save_new_image(files):
         }
         return response_object, 422
 
-    file_name = secure_filename(file_name)
-    file_path = os.path.join(current_app.config['IMAGE_UPLOAD_DIRECTORY'], file_name)
+    s3_client = boto3.client('s3',
+                             aws_access_key_id=current_app.config['S3_ACCESS_KEY_ID'],
+                             aws_secret_access_key=current_app.config['S3_SECRET_ACCESS_KEY'])
 
-    file.save(file_path)
+    file_path = current_app.config['S3_PREFIX_NAME'] + file_name
+
+    try:
+        s3_client.upload_fileobj(file, current_app.config['S3_BUCKET_NAME'], file_path)
+    except ClientError as e:
+        response_object = {
+            'status': 'fail',
+            'message': 'Unable to upload file.'
+        }
+        return response_object, 422
 
     response_object = {
-        'image_path': file_path,
+        'status': 'success',
+        'message': 'File uploaded successfully.',
+        'file_path': current_app.config['S3_URL'] + '/' + file_path
     }
 
     return response_object, 201
