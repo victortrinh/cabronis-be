@@ -24,6 +24,7 @@
 ## 1. Authors
 
 - Victor Trinh - [victortrinh](https://github.com/victortrinh)
+- Simon Jacques - [sjacquescs](https://github.com/sjacquescs)
 
 ## 2. Setup
 

@@ -33,7 +33,8 @@ class Auth:
                         response_object = {
                             'status': 'success',
                             'message': 'Successfully logged in.',
-                            'Authorization': auth_token
+                            'roles': user.roles,
+                            'Authorization': auth_token.decode()
                         }
                         return response_object, 200
                 else:
@@ -60,7 +61,7 @@ class Auth:
     @staticmethod
     def logout_user(data):
         if data:
-            auth_token = data.split(" ")[1]
+            auth_token = data.split(' ')[1]
         else:
             auth_token = ''
         if auth_token:
@@ -94,7 +95,7 @@ class Auth:
                     'data': {
                         'user_id': user.blacklist_id,
                         'email': user.email,
-                        'admin': user.admin,
+                        'roles': user.roles,
                         'registered_on': str(user.registered_on)
                     }
                 }
@@ -110,3 +111,20 @@ class Auth:
                 'message': 'Provide a valid auth token.'
             }
             return response_object, 401
+
+    @staticmethod
+    @auth_token.get_user_roles
+    def get_user_roles(data):
+        if current_app.config.get('DISABLE_AUTHENTICATION', False):
+            logging.warning(
+                'Authentication is disabled. Skipped token validation.')
+            return ['buyer', 'seller', 'admin']
+
+        auth_token = data["token"]
+        resp = User.decode_auth_token(auth_token)
+
+        if not isinstance(resp, str):
+            user = User.query.filter_by(user_id=resp).first()
+            return user.roles
+        else:
+            return []

@@ -13,7 +13,7 @@ auth = Auth.auth_token
 @api.route('/all')
 class GetPacks(Resource):
     @api.doc('Get all packs')
-    @api.marshal_with(pack)
+    @api.marshal_list_with(pack, envelope='data')
     def get(self):
         return get_packs()
 
@@ -30,7 +30,7 @@ class GetPack(Resource):
 
 @api.route('/save')
 class SavePack(Resource):
-    @auth.login_required
+    @auth.login_required(role=['admin', 'seller'])
     @api.doc(security='Bearer')
     @api.doc('Save new pack')
     @api.expect(PackDTO.pack, validate=True)
@@ -42,7 +42,7 @@ class SavePack(Resource):
 @api.route('/update/<pack_id>')
 @api.param('pack_id', 'The Pack identifier')
 class UpdatePack(Resource):
-    @auth.login_required
+    @auth.login_required(role=['admin', 'seller'])
     @api.doc(security='Bearer')
     @api.doc('Update a pack')
     @api.expect(PackDTO.pack, validate=True)
@@ -54,7 +54,7 @@ class UpdatePack(Resource):
 @api.route('/delete/<pack_id>')
 @api.param('pack_id', 'The Pack identifier')
 class DeletePack(Resource):
-    @auth.login_required
+    @auth.login_required(role=['admin', 'seller'])
     @api.doc(security='Bearer')
     @api.doc('Delete a pack')
     def delete(self, pack_id):

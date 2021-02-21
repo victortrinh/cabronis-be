@@ -131,8 +131,5 @@ dmypy.json
 # VsCode settings
 .vscode
 
-# Postgres migrations
-migrations
-
 # PyCharm stuff
 .idea

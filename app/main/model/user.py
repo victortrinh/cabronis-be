@@ -1,4 +1,5 @@
 import datetime
+from enum import Enum
 
 import jwt
 
@@ -6,24 +7,24 @@ from app.main.model.blacklist import BlacklistToken
 from .. import db, flask_bcrypt
 from ..config import key
 
-wishlist_table = db.Table('wishlist', db.metadata,
-                          db.Column('user', db.Integer,
-                                    db.ForeignKey('users.user_id')),
-                          db.Column('sellable', db.Integer,
-                                    db.ForeignKey('sellables.sellable_id'))
-                          )
+
+class UserRole(Enum):
+    buyer = 'buyer' 
+    seller = 'seller'
+    admin = 'admin'
 
 
 class User(db.Model):
-    __tablename__ = "users"
+    __tablename__ = 'users'
 
     user_id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(120), index=True, unique=False)
-    last_name = db.Column(db.String(120), index=True, unique=False)
+    first_name = db.Column(db.String(120), unique=False)
+    last_name = db.Column(db.String(120), unique=False)
     email = db.Column(db.String(120), index=True, unique=True)
     registered_on = db.Column(db.DateTime, nullable=False)
+    roles = db.Column(db.ARRAY(db.String(120)))
     password_hash = db.Column(db.String(128))
-    wishlist = db.relationship("Sellable", secondary=wishlist_table)
+    sellables = db.relationship('Wishlist')
 
     def __repr__(self):
         return '<User {}>'.format(self.email)
@@ -61,14 +62,25 @@ class User(db.Model):
             return e
 
     @staticmethod
+    def decode_auth_token(auth_token):
+        """
+        Decodes the auth token
+        :param auth_token:
+        :return: integer|string
+        """
+        try:
+            payload = jwt.decode(auth_token, key)
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            return 'Signature expired. Please log in again.'
+        except jwt.InvalidTokenError:
+            return 'Invalid token. Please log in again.'
+
+    @staticmethod
     def is_valid_token(auth_token):
         try:
             payload = jwt.decode(auth_token, key)
-            is_blacklisted_token = BlacklistToken.check_blacklist(auth_token)
-            if is_blacklisted_token:
-                return False
-            else:
-                return True
+            return payload["sub"]
         except jwt.ExpiredSignatureError:
             return False
         except jwt.InvalidTokenError:
