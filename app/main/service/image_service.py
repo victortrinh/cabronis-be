@@ -34,8 +34,10 @@ def save_new_image(files):
         }
         return response_object, 422
 
+    old_file_position = file.tell()
     file.seek(0, os.SEEK_END)
     file_length = file.tell()
+    file.seek(old_file_position, os.SEEK_SET)
 
     max_file_size_mb = current_app.config['IMAGE_MAX_FILE_SIZE']
     max_file_size_b = max_file_size_mb * 1024 ** 2
