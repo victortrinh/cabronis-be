@@ -48,13 +48,13 @@ def save_new_image(files):
         return response_object, 422
 
     s3_client = boto3.client('s3',
-                             aws_access_key_id=current_app.config['BUCKETEER_ACCESS_KEY_ID'],
-                             aws_secret_access_key=current_app.config['BUCKETEER_SECRET_ACCESS_KEY'])
+                             aws_access_key_id=current_app.config['S3_ACCESS_KEY_ID'],
+                             aws_secret_access_key=current_app.config['S3_SECRET_ACCESS_KEY'])
 
-    file_path = current_app.config['BUCKETEER_PREFIX_NAME'] + file_name
+    file_path = current_app.config['S3_PREFIX_NAME'] + file_name
 
     try:
-        s3_client.upload_fileobj(file, current_app.config['BUCKETEER_BUCKET_NAME'], file_path)
+        s3_client.upload_fileobj(file, current_app.config['S3_BUCKET_NAME'], file_path)
     except ClientError as e:
         response_object = {
             'status': 'fail',
@@ -64,7 +64,8 @@ def save_new_image(files):
 
     response_object = {
         'status': 'success',
-        'message': 'File uploaded successfully under ' + file_path + '.'
+        'message': 'File uploaded successfully.',
+        'file_path': current_app.config['S3_URL'] + '/' + file_path
     }
 
     return response_object, 201
