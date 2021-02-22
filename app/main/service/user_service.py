@@ -5,26 +5,26 @@ from app.main.model.user import User, UserRole
 from app.main.service.auth_service import Auth
 
 
-def check_password(password): 
-    SpecialSym =['$', '@', '#', '%'] 
-      
-    if len(password) < 8: 
-        return 'Password length should be at least 8'
-          
-    if len(password) > 20: 
-        return 'Password length should be not be greater than 8'
-          
-    if not any(char.isdigit() for char in password): 
-        return 'Password should have at least one numeral'
-          
-    if not any(char.isupper() for char in password): 
-        return 'Password should have at least one uppercase letter'
-          
-    if not any(char.islower() for char in password): 
-        return 'Password should have at least one lowercase letter'
-          
-    if not any(char in SpecialSym for char in password): 
-        return 'Password should have at least one of the symbols $@#' 
+def check_password(password):
+    SpecialSym = ['$', '@', '#', '%', '!']
+
+    if len(password) < 8:
+        return 'Password length should be at least 8.'
+
+    if len(password) > 20:
+        return 'Password length should be not be greater than 8.'
+
+    if not any(char.isdigit() for char in password):
+        return 'Password should have at least one numeral.'
+
+    if not any(char.isupper() for char in password):
+        return 'Password should have at least one uppercase letter.'
+
+    if not any(char.islower() for char in password):
+        return 'Password should have at least one lowercase letter.'
+
+    if not any(char in SpecialSym for char in password):
+        return 'Password should have at least one of the symbols $, @, #, % or !.'
 
     return None
 
@@ -135,7 +135,7 @@ def get_roles(data):
         if not isinstance(resp, str):
             user = User.query.filter_by(user_id=resp).first()
             return user
-        else: 
+        else:
             return []
     else:
         return []
