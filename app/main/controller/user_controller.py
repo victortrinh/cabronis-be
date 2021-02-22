@@ -61,7 +61,7 @@ class User(Resource):
         return get_a_user(user_id)
 
 
-@api.route('/getRoles')
+@api.route('/roles')
 class GetRoles(Resource):
     @auth.login_required
     @api.doc(security='Bearer')
