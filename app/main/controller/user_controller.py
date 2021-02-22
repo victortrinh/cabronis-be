@@ -3,7 +3,7 @@ from flask_restplus import Resource
 
 from ..dto.user_dto import UserDto
 from ..service.auth_service import Auth
-from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password, get_roles
+from ..service.user_service import save_new_user, get_all_users, get_a_user, change_user_password, get_roles, update_user
 
 api = UserDto.api
 user = UserDto.user
@@ -35,6 +35,18 @@ class Register(Resource):
         return save_new_user(data=data)
 
 
+@api.route('/update/<user_id>')
+@api.param('user_id', 'The user identifier')
+class UpdateUser(Resource):
+    @auth.login_required(role=['admin', 'seller'])
+    @api.doc(security='Bearer')
+    @api.doc('Update an user')
+    @api.expect(UserDto.user_update, validate=True)
+    def put(self, user_id):
+        data = request.json
+        return update_user(user_id, data)
+
+
 @api.route('/changePassword')
 class ChangePassword(Resource):
     @auth.login_required
@@ -49,6 +61,17 @@ class ChangePassword(Resource):
         return change_user_password(data=data)
 
 
+@api.route('/roles')
+class GetRoles(Resource):
+    @auth.login_required
+    @api.doc(security='Bearer')
+    @api.doc('Get roles')
+    @api.marshal_with(user_roles)
+    def get(self):
+        auth_header = request.headers.get('Authorization')
+        return get_roles(data=auth_header)
+
+
 @api.route('/<user_id>')
 @api.param('user_id', 'The User identifier')
 class User(Resource):
@@ -59,14 +82,3 @@ class User(Resource):
     @api.marshal_with(user)
     def get(self, user_id):
         return get_a_user(user_id)
-
-
-@api.route('/roles')
-class GetRoles(Resource):
-    @auth.login_required
-    @api.doc(security='Bearer')
-    @api.doc('Get role')
-    @api.marshal_with(user_roles)
-    def post(self):
-        auth_header = request.headers.get('Authorization')
-        return get_roles(data=auth_header)

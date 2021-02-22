@@ -7,6 +7,7 @@ class WishlistDTO:
     api = Namespace('Wishlist', description='Wishlist Operations')
 
     wishlist = api.model('Wishlist', {
+        'sellable_id': fields.String(required=False, description='The wishlist identifier'),
         'name': fields.String(description='The wishlist item name'),
         'description': fields.String(description='The description of the wishlist item'),
         'image_path': fields.String(description='The image of the wishlist item'),
@@ -25,6 +26,7 @@ class PackDTO:
     api = Namespace('Pack', description='Pack operations')
 
     pack = api.model('Pack', {
+        'pack_id': fields.String(required=False, description='The pack identifier'),
         'name': fields.String(required=True, description='The pack name'),
         'description': fields.String(required=True, description='The description of the pack'),
         'stock': fields.Integer(required=True, description='The amount of stocks for this pack'),

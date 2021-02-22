@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from app.main import db
 from app.main.model.user import User, UserRole
@@ -29,6 +30,15 @@ def check_password(password):
     return None
 
 
+def check_email(email):
+    EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
+
+    if not EMAIL_REGEX.match(email):
+        return 'Please enter a valid email address. (example@mail.com).'
+
+    return None
+
+
 def save_new_user(data):
     user = User.query.filter_by(email=data['email']).first()
 
@@ -50,6 +60,16 @@ def save_new_user(data):
 
         return response_object, 409
 
+    emailMessage = check_email(data['email'])
+
+    if emailMessage:
+        response_object = {
+            'status': 'fail',
+            'message': emailMessage
+        }
+
+        return response_object, 409
+
     new_user = User(
         first_name=data['first_name'],
         last_name=data['last_name'],
@@ -67,6 +87,41 @@ def save_new_user(data):
         'message': 'Successfully registered.'
     }
 
+    return response_object, 201
+
+
+def update_user(user_id, user):
+    existing_user = User.query.filter_by(user_id=user_id).first()
+
+    if not existing_user:
+        response_object = {
+            'status': 'fail',
+            'message': 'User does not exist.'
+        }
+        return response_object, 409
+
+    emailMessage = check_email(user['email'])
+
+    if emailMessage:
+        response_object = {
+            'status': 'fail',
+            'message': emailMessage
+        }
+
+        return response_object, 409
+
+    existing_user.first_name = user['first_name'],
+    existing_user.last_name = user['last_name'],
+    existing_user.email = user['email'],
+    existing_user.roles = user['roles']
+
+    db.session.flush()
+    db.session.commit()
+
+    response_object = {
+        'status': 'success',
+        'message': 'Successfully updated user.',
+    }
     return response_object, 201
 
 
