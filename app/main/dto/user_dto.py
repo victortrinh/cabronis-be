@@ -7,6 +7,7 @@ class UserDto:
     api = Namespace('User', description='user related operations')
 
     user = api.model('user', {
+        'user_id': fields.String(required=False, description='user identifier'),
         'email': fields.String(required=True, description='user email address'),
         'first_name': fields.String(required=True, description='user first name'),
         'last_name': fields.String(required=True, description='user last name'),
@@ -17,7 +18,15 @@ class UserDto:
         'roles': fields.List(fields.String(required=False, description='user roles', enum=UserRole._member_names_)),
     })
 
+    user_update = api.model('user', {
+        'email': fields.String(required=True, description='user email address'),
+        'first_name': fields.String(required=True, description='user first name'),
+        'last_name': fields.String(required=True, description='user last name'),
+        'roles': fields.List(fields.String(required=False, description='user roles', enum=UserRole._member_names_)),
+    })
+
     user_with_roles = api.model('user', {
+        'user_id': fields.String(required=False, description='user identifier'),
         'email': fields.String(required=True, description='user email address'),
         'first_name': fields.String(required=True, description='user first name'),
         'last_name': fields.String(required=True, description='user last name'),
@@ -26,6 +35,7 @@ class UserDto:
     })
 
     user_change_password = api.model('user_change_password', {
+        'user_id': fields.String(required=False, description='user identifier'),
         'email': fields.String(required=True, description='user email address'),
         'current_password': fields.String(required=True, description='Current user password'),
         'password': fields.String(required=True, description='New user password'),
