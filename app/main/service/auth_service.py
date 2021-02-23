@@ -33,6 +33,7 @@ class Auth:
                         response_object = {
                             'status': 'success',
                             'message': 'Successfully logged in.',
+                            'email': user.email,
                             'roles': user.roles,
                             'Authorization': auth_token.decode()
                         }
